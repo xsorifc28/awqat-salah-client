@@ -1,6 +1,6 @@
 # Awqat Salah Client
 
-[![npm package](https://img.shields.io/badge/npm%20i-@xsor/awqat-salah-client-brightgreen)](https://www.npmjs.com/package/@xsor/awqat-salah-client)
+[![npm package](https://img.shields.io/badge/npm%20i-@xsor/awqat--salah--client-brightgreen)](https://www.npmjs.com/package/@xsor/awqat-salah-client)
 [![downloads](https://img.shields.io/npm/dt/@xsor/awqat-salah-client)](https://www.npmjs.com/package/@xsor/awqat-salah-client)
 [![version](https://img.shields.io/npm/v/@xsor/awqat-salah-client)](https://github.com/xsorifc28/awqat-salah-client/releases)
 [![coverage](https://img.shields.io/codecov/c/github/xsorifc28/awqat-salah-client)](https://app.codecov.io/gh/xsorifc28/awqat-salah-client)
