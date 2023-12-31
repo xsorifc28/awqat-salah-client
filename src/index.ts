@@ -97,13 +97,33 @@ export class AwqatSalahApi {
         return this.get<PrayerTime[]>(`${AwqatSalahApi.API_BASE}/PrayerTime/Ramadan/${cityId}`);
     }
 
+    public async dateRange(cityId: number, startDate: Date, endDate: Date): Promise<PrayerTime[] | undefined> {
+        return this.post<PrayerTime[], DateRangeFilter>(`${AwqatSalahApi.API_BASE}/PrayerTime/DateRange/`, {
+            cityId: cityId,
+            startDate: startDate.toISOString(),
+            endDate: endDate.toISOString()
+        });
+    }
+
     private async get<T>(path: string): Promise<T | undefined> {
-        const response: AxiosResponse<IResult<T>> = await axios.get(this.baseUrl + path, {
+        const response: AxiosResponse<IResult<T>> = await axios.get(this.baseUrl + path, this.getAuthHeaderConfig()).catch(this.handleError<T, void>);
+        return this.extractResponse(response);
+    }
+
+    private async post<T, R>(path: string, data: R): Promise<T | undefined> {
+        const response: AxiosResponse<IResult<T>> = await axios.post(this.baseUrl + path, data, this.getAuthHeaderConfig()).catch(this.handleError<T, void>);
+        return this.extractResponse(response);
+    }
+
+    private getAuthHeaderConfig() {
+        return {
             headers: {
                 Authorization: `Bearer ${this.accessToken}`
             }
-        }).catch(this.handleError<T, void>);
+        };
+    }
 
+    private extractResponse<T>(response: AxiosResponse<IResult<T>>) {
         if (this.checkSuccess<T>(response)) {
             return response.data.data;
         } else {
@@ -119,7 +139,7 @@ export class AwqatSalahApi {
     }
 
     private parseJwt(token: string): JwtToken {
-        return JSON.parse(atob(token.split('.')[1]));
+       return JSON.parse(atob(token.split('.')[1]));
     }
 
     private handleError<T, D>(e: AxiosError<IResult<T>, D>): AxiosResponse<IResult<T>, D> {
@@ -144,13 +164,13 @@ export class AwqatSalahApi {
     }
 }
 
-type IResult<T> = {
+type IResult<T = never> = {
     success: boolean,
     message: string | null
     data?: T
 }
 
-type ApiError = IResult<undefined>
+type ApiError = IResult
 
 type AuthResponse = {
     accessToken: string,
@@ -160,6 +180,12 @@ type AuthResponse = {
 type PostDataLogin = {
     email: string,
     password: string
+}
+
+type DateRangeFilter = {
+    cityId: number,
+    startDate: string,
+    endDate: string
 }
 
 type JwtToken = {

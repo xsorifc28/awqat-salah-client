@@ -153,6 +153,17 @@ describe('AwqatSalahApi', () => {
           Authorization: `Bearer ${mockedAccessToken}`,
         },
       });
+    };
+
+    const expectPostCall = <T, R>(response: T | undefined, mockResponseData: {
+      data?: T | undefined
+    }, postBody: R, endpoint: string) => {
+      expect(response).toEqual(mockResponseData.data);
+      expect(mockedAxios.post).toHaveBeenNthCalledWith(1, 'https://awqatsalah.diyanet.gov.tr/api' + endpoint, postBody, {
+        headers: {
+          Authorization: `Bearer ${mockedAccessToken}`,
+        }
+      });
     }
 
     it('should make a GET request to fetch daily content', async () => {
@@ -390,7 +401,7 @@ describe('AwqatSalahApi', () => {
       expectGetCall(response, mockResponseData, '/PrayerTime/Weekly/1');
     });
 
-    it('should make a GET request to fetch weekly prayer times', async () => {
+    it('should make a GET request to fetch monthly prayer times', async () => {
       const mockResponseData = {
         success: true,
         data: [
@@ -426,6 +437,52 @@ describe('AwqatSalahApi', () => {
       const response = await api.monthlyPrayerTime(1);
       expectGetCall(response, mockResponseData, '/PrayerTime/Monthly/1');
     });
+
+    it('should make a POST request to fetch prayer times for date range', async () => {
+      mockedAxios.post.mockReset();
+
+      const mockResponseData = {
+        success: true,
+        data: [
+          {
+            shapeMoonUrl: 'url',
+            fajr: 'fajr',
+            sunrise: 'sunrise',
+            dhuhr: 'dhuhr',
+            asr: 'asr',
+            maghrib: 'maghrib',
+            isha: 'isha',
+            astronomicalSunset: 'astSunset',
+            astronomicalSunrise: 'astSunrise',
+            hijriDateShort: 'hijriShort',
+            hijriDateShortIso8601: 'hijriIso',
+            hijriDateLong: 'hijriLong',
+            hijriDateLongIso8601: 'hijriLongIso',
+            qiblaTime: 'qibla',
+            gregorianDateShort: 'gregShort',
+            gregorianDateShortIso8601: 'gregIso',
+            gregorianDateLong: 'gregLong',
+            gregorianDateLongIso8601: 'gregLongIso',
+            greenwichMeanTimeZone: 0,
+          }
+        ]
+      };
+
+      mockedAxios.post.mockResolvedValueOnce({
+        status: 200,
+        data: mockResponseData,
+      });
+
+      const dateRangeRequestBody = {
+        cityId: 1,
+        startDate: new Date(2022, 0, 1),
+        endDate: new Date( 2023, 0, 1)
+      };
+
+      const response = await api.dateRange(dateRangeRequestBody.cityId, dateRangeRequestBody.startDate, dateRangeRequestBody.endDate);
+      expectPostCall(response, mockResponseData, { cityId: 1, startDate: dateRangeRequestBody.startDate.toISOString(), endDate: dateRangeRequestBody.endDate.toISOString() }, '/PrayerTime/DateRange/');
+    });
+
 
     it('should make a GET request to fetch ramadan prayer times', async () => {
       const mockResponseData = {

@@ -41,6 +41,9 @@ import { AwqatSalahApi } from '../src'
                 const monthlyPrayerTimes = await api.monthlyPrayerTime(cityId);
                 console.info(`Got monthly prayer times: ${monthlyPrayerTimes?.length}`);
 
+                const dateRangeTime = await api.dateRange(cityId, new Date(2023, 0), new Date(2023, 6));
+                console.info(`Got prayer times for range: ${dateRangeTime?.length}`);
+
                 const eidPrayerTime = await api.eidPrayerTime(cityId);
                 console.info(`Got eid prayer times: ${eidPrayerTime?.eidAlAdhaDate}`);
 
