@@ -21,7 +21,25 @@ on:
       - master
 
 jobs:
+  test-with-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+      - name: Install modules
+        run: npm install
+      - name: Run tests
+        run: npm test -- --coverage
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
   test:
+    needs: test-with-coverage
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -39,6 +57,4 @@ jobs:
       - name: Install modules
         run: npm install
       - name: Run tests
-        run: npm test -- --coverage
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        run: npm test
