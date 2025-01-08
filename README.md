@@ -10,7 +10,9 @@
 
 ## Description
 
-A client library for [Diyanet's Awqat Salah Rest API Service](https://awqatsalah.diyanet.gov.tr/index.html) for fetching Islamic prayer times across different geographical locations. Instructions for obtaining a username and password required to authenticate with the API can be found
+A client library for [Diyanet's Awqat Salah Rest API Service](https://awqatsalah.diyanet.gov.tr/index.html) for fetching Islamic prayer times across different
+geographical locations. Instructions for obtaining a username and password required to authenticate with the API can
+be found on [Diyanet's Awqat Salah](https://awqatsalah.diyanet.gov.tr/index.html) page
 
 Contains the following modules:
 - a CommonJS (in **dist/cjs** folder)
