@@ -69,6 +69,6 @@
     "webpack-cli": "5.1.4"
   },
   "dependencies": {
-    "axios": "1.7.7"
+    "axios": "1.8.4"
   }
 }
