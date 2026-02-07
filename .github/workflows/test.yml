@@ -28,7 +28,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20.x
+          node-version: 24.x
       - name: Install modules
         run: npm install
       - name: Run tests
@@ -46,7 +46,7 @@ jobs:
         os:
           - ubuntu-latest
           - windows-latest
-        node: [16.x, 18.x, 20.x]
+        node: [18.x, 20.x, 22.x, 24.x]
 
     steps:
       - uses: actions/checkout@v4

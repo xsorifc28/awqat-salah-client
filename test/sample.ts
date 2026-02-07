@@ -3,7 +3,6 @@ import { AwqatSalahApi } from '../src'
 (async () => {
   const api = new AwqatSalahApi();
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   await api.login(process.env.email!, process.env.password!);
 
   const dailyContent = await api.dailyContent();
