@@ -86,9 +86,9 @@ describe('AwqatSalahApi', () => {
       expect(api['refreshToken']).toBe('newRefreshToken');
 
       expect(consoleInfo).toHaveBeenCalledTimes(3);
-      expect(consoleInfo).toHaveBeenNthCalledWith(1, expect.stringMatching(/^Access token will be refreshed in \d{4} millis$/));
-      expect(consoleInfo).toHaveBeenNthCalledWith(2, expect.stringMatching('Refreshing access token'));
-      expect(consoleInfo).toHaveBeenNthCalledWith(3, expect.stringMatching(/^Access token will be refreshed in \d{1} millis$/));
+      expect(consoleInfo).toHaveBeenNthCalledWith(1, expect.stringMatching(/^\[AwqatSalahApi\] Access token will be refreshed in \d{4} millis$/));
+      expect(consoleInfo).toHaveBeenNthCalledWith(2, expect.stringMatching(/^\[AwqatSalahApi\] Refreshing access token$/));
+      expect(consoleInfo).toHaveBeenNthCalledWith(3, expect.stringMatching(/^\[AwqatSalahApi\] Access token will be refreshed in \d{1} millis$/));
       expect(mockedAxios.post).toHaveBeenCalledTimes(1);
       expect(mockedAxios.post).toHaveBeenNthCalledWith(1, 'https://awqatsalah.diyanet.gov.tr/Auth/Login',
         {
@@ -117,7 +117,7 @@ describe('AwqatSalahApi', () => {
         }
       );
       expect(consoleError).toHaveBeenCalledTimes(1);
-      expect(consoleError).toHaveBeenNthCalledWith(1, 'Error during API call, url: unknown, method: unknown, status: 0, axiosErrorMessage: Login failed, apiSuccess: false, apiErrorMessage: Unknown error');
+      expect(consoleError).toHaveBeenNthCalledWith(1, '[AwqatSalahApi] Error during API call, url: unknown, method: unknown, status: 0, axiosErrorMessage: Login failed, apiSuccess: false, apiErrorMessage: Unknown error');
     });
 
     it('should handle refresh access token failure', async () => {
@@ -146,8 +146,8 @@ describe('AwqatSalahApi', () => {
       jest.runAllTimers();
       await new Promise(jest.requireActual("timers").setImmediate);
 
-      expect(consoleInfo).toHaveBeenCalledWith('Refreshing access token');
-      expect(consoleError).toHaveBeenCalledWith('Failed to refresh access token');
+      expect(consoleInfo).toHaveBeenCalledWith('[AwqatSalahApi] Refreshing access token');
+      expect(consoleError).toHaveBeenCalledWith('[AwqatSalahApi] Failed to refresh access token');
     });
   });
 
@@ -595,7 +595,7 @@ describe('AwqatSalahApi', () => {
       const response = await api.cityDetail(-1);
       expectGetCall(response, mockResponseData, '/Place/CityDetail/-1');
       expect(consoleError).toHaveBeenCalledTimes(1);
-      expect(consoleError).toHaveBeenNthCalledWith(1, 'Error during API call, url: https://test.url, method: GET, status: 404, axiosErrorMessage: 404 Not Found Error, apiSuccess: false, apiErrorMessage: CityDetail for city id -1 not found');
+      expect(consoleError).toHaveBeenNthCalledWith(1, '[AwqatSalahApi] Error during API call, url: https://test.url, method: GET, status: 404, axiosErrorMessage: 404 Not Found Error, apiSuccess: false, apiErrorMessage: CityDetail for city id -1 not found');
     });
   });
 });

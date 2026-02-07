@@ -32,7 +32,7 @@ export class AwqatSalahApi {
   }
 
   private async refreshAccessToken() {
-    console.info('Refreshing access token');
+    console.info('[AwqatSalahApi] Refreshing access token');
     const response = await this.get<AuthResponse>(`${AwqatSalahApi.AUTH_BASE}/RefreshToken/${this.refreshToken}`);
 
     if (response) {
@@ -40,7 +40,7 @@ export class AwqatSalahApi {
       this.refreshToken = response.refreshToken;
       this.queueRefresh();
     } else {
-      console.error('Failed to refresh access token');
+      console.error('[AwqatSalahApi] Failed to refresh access token');
     }
   }
 
@@ -48,7 +48,7 @@ export class AwqatSalahApi {
     const accessTokenExpiry = this.parseJwt(this.accessToken).exp * 1000;
     const refreshIn = Math.max(accessTokenExpiry - AwqatSalahApi.MILLIS_1_MINUTES - Date.now(), 0);
     setTimeout(() => this.refreshAccessToken(), refreshIn);
-    console.info(`Access token will be refreshed in ${refreshIn} millis`);
+    console.info(`[AwqatSalahApi] Access token will be refreshed in ${refreshIn} millis`);
   }
 
   public async dailyContent(): Promise<DailyContent | undefined> {
@@ -160,7 +160,7 @@ export class AwqatSalahApi {
       message: e.message
     };
 
-    console.error(`Error during API call, url: ${response.config.url}, method: ${response.config.method}, status: ${response.status}, axiosErrorMessage: ${e.message}, apiSuccess: ${response.data.success}, apiErrorMessage: ${response.data.message}`);
+    console.error(`[AwqatSalahApi] Error during API call, url: ${response.config.url}, method: ${response.config.method}, status: ${response.status}, axiosErrorMessage: ${e.message}, apiSuccess: ${response.data.success}, apiErrorMessage: ${response.data.message}`);
 
     return response;
   }
