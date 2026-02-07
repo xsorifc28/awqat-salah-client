@@ -39,6 +39,8 @@ export class AwqatSalahApi {
       this.accessToken = response.accessToken;
       this.refreshToken = response.refreshToken;
       this.queueRefresh();
+    } else {
+      console.error('Failed to refresh access token');
     }
   }
 

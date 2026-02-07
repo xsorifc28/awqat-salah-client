@@ -119,6 +119,36 @@ describe('AwqatSalahApi', () => {
       expect(consoleError).toHaveBeenCalledTimes(1);
       expect(consoleError).toHaveBeenNthCalledWith(1, 'Error during API call, url: unknown, method: unknown, status: 0, axiosErrorMessage: Login failed, apiSuccess: false, apiErrorMessage: Unknown error');
     });
+
+    it('should handle refresh access token failure', async () => {
+      mockedAxios.post.mockResolvedValue({
+        status: 200,
+        data: {
+          success: true,
+          data: {
+            accessToken: mockedAccessToken,
+            refreshToken: mockRefreshToken,
+          },
+        },
+      });
+
+      // Mock the refresh token call to return failed response
+      mockedAxios.get.mockResolvedValue({
+        status: 200,
+        data: {
+          success: false,
+          message: 'Refresh token is invalid or expired'
+        }
+      });
+
+      await api.login('test@example.com', 'password');
+
+      jest.runAllTimers();
+      await new Promise(jest.requireActual("timers").setImmediate);
+
+      expect(consoleInfo).toHaveBeenCalledWith('Refreshing access token');
+      expect(consoleError).toHaveBeenCalledWith('Failed to refresh access token');
+    });
   });
 
   describe('Endpoints', () => {
